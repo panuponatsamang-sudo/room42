@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>ห้อง 4/2</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&family=Prompt:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg:        #0f0f13;
+  --bg2:       #16161d;
+  --bg3:       #1e1e28;
+  --bg4:       #26263a;
+  --accent:    #7c6ef5;
+  --accent2:   #9d93ff;
+  --accent3:   #c4beff;
+  --hw:        #f5a623;
+  --hw2:       #ffc55a;
+  --text:      #e8e6f0;
+  --text2:     #9b98b0;
+  --text3:     #5e5c78;
+  --border:    rgba(124,110,245,0.15);
+  --border2:   rgba(124,110,245,0.3);
+  --bubble-me: rgba(124,110,245,0.18);
+  --bubble-other: rgba(30,30,40,0.9);
+  --hw-bubble: rgba(245,166,35,0.12);
+  --radius:    14px;
+  --sb: 0 0 0 1px var(--border);
+}
+
+html, body { height:100%; }
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ──── AUTH SCREEN ──────────────────────────────── */
+#auth-screen {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(124,110,245,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 75% 70%, rgba(245,166,35,0.05) 0%, transparent 70%);
+  z-index: 100;
+}
+
+.auth-card {
+  width: 100%; max-width: 380px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  padding: 36px 32px 32px;
+  margin: 16px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03) inset;
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.auth-logo .icon {
+  font-size: 44px;
+  display: block;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 12px rgba(124,110,245,0.4));
+}
+.auth-logo h1 {
+  font-family: 'Prompt', sans-serif;
+  font-size: 22px; font-weight: 600;
+  color: var(--accent3);
+  letter-spacing: 0.5px;
+}
+.auth-logo p { font-size: 12px; color: var(--text3); margin-top: 4px; letter-spacing: 1px; }
+
+.auth-tabs {
+  display: flex;
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 3px;
+  margin-bottom: 24px;
+}
+.auth-tab {
+  flex: 1; padding: 9px;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer;
+  color: var(--text3);
+  transition: all .2s;
+  border: none; background: none;
+  font-family: 'Sarabun', sans-serif;
+}
+.auth-tab.on { background: var(--accent); color: #fff; box-shadow: 0 2px 8px rgba(124,110,245,0.4); }
+
+.auth-pane { display: none; }
+.auth-pane.on { display: block; }
+
+.auth-err {
+  background: rgba(200,50,50,0.15);
+  border: 1px solid rgba(200,50,50,0.3);
+  color: #ff9999; font-size: 13px;
+  border-radius: 8px; padding: 10px 13px;
+  margin-bottom: 14px; display: none;
+}
+.auth-ok {
+  background: rgba(100,200,100,0.1);
+  border: 1px solid rgba(100,200,100,0.25);
+  color: #99ffaa; font-size: 13px;
+  border-radius: 8px; padding: 10px 13px;
+  margin-bottom: 14px; display: none;
+}
+
+.afield { margin-bottom: 13px; }
+.afield label { display:block; font-size:11px; color:var(--text3); letter-spacing:1.5px; margin-bottom:5px; font-weight:600; }
+.afield input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px;
+  outline: none;
+  transition: all .2s;
+}
+.afield input:focus { border-color: var(--accent); background: rgba(124,110,245,0.06); }
+.afield input::placeholder { color: var(--text3); }
+
+.abtn {
+  width: 100%; margin-top: 4px;
+  padding: 13px;
+  background: var(--accent);
+  border: none; border-radius: 10px;
+  color: #fff;
+  font-family: 'Prompt', sans-serif;
+  font-size: 15px; font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  letter-spacing: 0.5px;
+}
+.abtn:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(124,110,245,0.4); }
+.abtn:active { transform: none; }
+
+/* ──── APP SHELL ──────────────────────────────── */
+#app {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+}
+#app.on { display: flex; }
+
+/* TOP BAR */
+.topbar {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 56px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 8px;
+  position: relative;
+  z-index: 10;
+}
+.topbar-brand {
+  font-family: 'Prompt', sans-serif;
+  font-size: 16px; font-weight: 600;
+  color: var(--accent3);
+  flex: 1;
+}
+.topbar-brand span { color: var(--text3); font-size: 12px; font-weight: 400; margin-left: 6px; }
+.topbar-user {
+  font-size: 13px; color: var(--text2);
+  display: flex; align-items: center; gap: 8px;
+}
+.avatar-sm {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.logout-btn {
+  background: none; border: 1px solid var(--border);
+  border-radius: 8px; padding: 5px 10px;
+  color: var(--text3); font-size: 12px;
+  cursor: pointer; transition: all .2s;
+  font-family: 'Sarabun', sans-serif;
+}
+.logout-btn:hover { color: #ff8888; border-color: rgba(200,50,50,0.3); }
+
+/* TAB BAR */
+.tabbar {
+  display: flex;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.tabbtn {
+  flex: 1; padding: 0 12px;
+  height: 46px;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px; font-weight: 600;
+  color: var(--text3);
+  cursor: pointer;
+  border: none; background: none;
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+  position: relative;
+}
+.tabbtn.on { color: var(--accent2); border-bottom-color: var(--accent); }
+.tabbtn.hw-tab.on { color: var(--hw2); border-bottom-color: var(--hw); }
+.tabbtn:hover:not(.on) { color: var(--text); }
+.unread-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent);
+  position: absolute; top: 9px; right: calc(50% - 28px);
+  display: none;
+}
+.unread-dot.show { display: block; }
+
+/* TAB PAGES */
+.tabpage { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+.tabpage.on { display: flex; }
+
+/* MESSAGE AREA */
+.msg-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  scroll-behavior: smooth;
+}
+.msg-area::-webkit-scrollbar { width: 4px; }
+.msg-area::-webkit-scrollbar-track { background: transparent; }
+.msg-area::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 4px; }
+
+/* date divider */
+.date-sep {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 1px;
+  padding: 12px 0 6px;
+  position: relative;
+}
+.date-sep::before, .date-sep::after {
+  content: '';
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  height: 1px; background: var(--border);
+  width: calc(50% - 70px);
+}
+.date-sep::before { left: 0; }
+.date-sep::after  { right: 0; }
+
+/* bubbles */
+.bubble-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 7px;
+  margin-top: 2px;
+  animation: fadeUp .2s ease;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(6px); }
+  to   { opacity:1; transform:none; }
+}
+.bubble-row.me { flex-direction: row-reverse; }
+.bubble-row.me + .bubble-row.me .avatar-bubble,
+.bubble-row.other + .bubble-row.other .avatar-bubble { opacity: 0; }
+
+.avatar-bubble {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--bg4), var(--bg3));
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--text2);
+  flex-shrink: 0;
+}
+.bubble-row.me .avatar-bubble {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+}
+
+.bubble-wrap { max-width: min(72%, 480px); }
+.bubble-row.me .bubble-wrap { align-items: flex-end; }
+
+.bubble-name {
+  font-size: 11px; color: var(--text3);
+  padding: 0 4px 3px;
+  font-weight: 600;
+  display: none;
+}
+/* show name only on first in group */
+.bubble-row.first .bubble-name { display: block; }
+
+.bubble {
+  background: var(--bubble-other);
+  border: 1px solid var(--border);
+  border-radius: 18px 18px 18px 4px;
+  padding: 10px 14px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+  word-break: break-word;
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+.bubble-row.me .bubble {
+  background: var(--bubble-me);
+  border-color: rgba(124,110,245,0.25);
+  border-radius: 18px 18px 4px 18px;
+}
+
+/* hw bubble styling */
+.hw-page .bubble-row:not(.me) .bubble {
+  background: var(--hw-bubble);
+  border-color: rgba(245,166,35,0.2);
+}
+.hw-page .bubble-row.me .bubble {
+  background: rgba(245,166,35,0.15);
+  border-color: rgba(245,166,35,0.3);
+}
+
+.bubble-time {
+  font-size: 10px; color: var(--text3);
+  padding: 2px 4px 0;
+  text-align: right;
+}
+.bubble-row.other .bubble-time { text-align: left; }
+
+.bubble-del {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  background: rgba(200,50,50,0.15);
+  border: 1px solid rgba(200,50,50,0.25);
+  border-radius: 6px;
+  padding: 3px 6px;
+  font-size: 11px; color: #ff8888;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .15s;
+  white-space: nowrap;
+}
+.bubble-row.me .bubble-del  { right: calc(100% + 8px); }
+.bubble-row.other .bubble-del { left: calc(100% + 8px); }
+.bubble:hover .bubble-del { opacity: 1; }
+
+/* INPUT BAR */
+.input-bar {
+  padding: 10px 12px;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+.msg-input {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 10px 16px;
+  color: var(--text);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px;
+  outline: none;
+  resize: none;
+  max-height: 120px;
+  min-height: 42px;
+  line-height: 1.45;
+  transition: border-color .2s;
+  overflow-y: auto;
+}
+.msg-input:focus { border-color: var(--accent); }
+.hw-page .msg-input:focus { border-color: var(--hw); }
+.msg-input::placeholder { color: var(--text3); }
+
+.send-btn {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: all .2s;
+  box-shadow: 0 2px 8px rgba(124,110,245,0.35);
+}
+.send-btn:hover { background: var(--accent2); transform: scale(1.05); }
+.send-btn:active { transform: scale(0.95); }
+.hw-page .send-btn { background: var(--hw); box-shadow: 0 2px 8px rgba(245,166,35,0.35); }
+.hw-page .send-btn:hover { background: var(--hw2); }
+
+/* empty state */
+.empty-state {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  color: var(--text3); gap: 10px;
+  padding: 40px 20px;
+}
+.empty-state .ei { font-size: 40px; opacity: 0.4; }
+.empty-state p { font-size: 14px; letter-spacing: 0.5px; text-align: center; }
+
+/* mobile */
+@media(max-width: 480px) {
+  .auth-card { padding: 28px 22px 24px; }
+  .bubble { font-size: 14px; }
+  .msg-input { font-size: 14px; }
+  .topbar-user .name-text { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ AUTH ══════════════════════════════════════════ -->
+<div id="auth-screen">
+<div class="auth-card">
+  <div class="auth-logo">
+    <span class="icon">📚</span>
+    <h1>ห้อง 4/2</h1>
+    <p>แชท · บันทึกการบ้าน</p>
+  </div>
+
+  <div class="auth-tabs">
+    <button class="auth-tab on" onclick="authTab('login')">เข้าสู่ระบบ</button>
+    <button class="auth-tab" onclick="authTab('reg')">สมัครสมาชิก</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="auth-pane on" id="pane-login">
+    <div class="auth-err" id="lerr"></div>
+    <div class="afield"><label>USERNAME</label><input id="l-u" type="text" placeholder="ชื่อผู้ใช้" autocomplete="username"></div>
+    <div class="afield"><label>รหัสผ่าน</label><input id="l-p" type="password" placeholder="••••••" autocomplete="current-password"></div>
+    <button class="abtn" onclick="doLogin()">เข้าสู่ระบบ →</button>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="auth-pane" id="pane-reg">
+    <div class="auth-err" id="rerr"></div>
+    <div class="auth-ok" id="rok"></div>
+    <div class="afield"><label>ชื่อ-นามสกุล / ชื่อเล่น</label><input id="r-name" type="text" placeholder="ชื่อที่แสดงในแชท"></div>
+    <div class="afield"><label>USERNAME</label><input id="r-u" type="text" placeholder="อย่างน้อย 2 ตัว" autocomplete="username"></div>
+    <div class="afield"><label>รหัสผ่าน</label><input id="r-p" type="password" placeholder="อย่างน้อย 4 ตัว"></div>
+    <button class="abtn" onclick="doRegister()">สมัครสมาชิก ✓</button>
+  </div>
+</div>
+</div>
+
+<!-- ══ APP ═══════════════════════════════════════════ -->
+<div id="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-brand">ห้อง 4/2 <span id="tb-sub"></span></div>
+    <div class="topbar-user">
+      <span class="name-text" id="tb-name"></span>
+      <div class="avatar-sm" id="tb-avatar"></div>
+      <button class="logout-btn" onclick="doLogout()">ออก</button>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tabbar">
+    <button class="tabbtn on" id="tab-chat" onclick="switchTab('chat')">
+      💬 แชท
+      <span class="unread-dot" id="dot-chat"></span>
+    </button>
+    <button class="tabbtn hw-tab" id="tab-hw" onclick="switchTab('hw')">
+      📝 การบ้าน
+      <span class="unread-dot" id="dot-hw" style="background:var(--hw)"></span>
+    </button>
+  </div>
+
+  <!-- CHAT PAGE -->
+  <div class="tabpage on" id="page-chat">
+    <div class="msg-area" id="chat-area"></div>
+    <div class="input-bar">
+      <textarea class="msg-input" id="chat-input" placeholder="พิมข้อความ..." rows="1"></textarea>
+      <button class="send-btn" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+
+  <!-- HOMEWORK PAGE -->
+  <div class="tabpage" id="page-hw">
+    <div class="msg-area" id="hw-area"></div>
+    <div class="input-bar">
+      <textarea class="msg-input" id="hw-input" placeholder="บันทึกการบ้าน... เช่น คณิต หน้า 45 ข้อ 1-10" rows="1" style="border-color:rgba(245,166,35,0.2)"></textarea>
+      <button class="send-btn" onclick="sendHW()" style="background:var(--hw);box-shadow:0 2px 8px rgba(245,166,35,0.35)">➤</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var ME = null;
+var chatMsgs = [];
+var hwNotes  = [];
+var chatEs = null;
+var hwEs   = null;
+var activeTab = 'chat';
+
+// ── INIT ─────────────────────────────────────────────
+(async function(){
+  var r = await fetch('/api/me');
+  var d = await r.json();
+  if (d.ok) { ME = d.user; startApp(); }
+})();
+
+// ── AUTH ─────────────────────────────────────────────
+function authTab(t) {
+  document.querySelectorAll('.auth-tab').forEach((b,i) => b.classList.toggle('on', (i===0&&t==='login')||(i===1&&t==='reg')));
+  document.getElementById('pane-login').classList.toggle('on', t==='login');
+  document.getElementById('pane-reg').classList.toggle('on', t==='reg');
+}
+
+async function doLogin() {
+  var u = v('l-u'), p = v('l-p');
+  var err = document.getElementById('lerr');
+  err.style.display = 'none';
+  if (!u||!p) { showErr(err,'กรอกให้ครบนะ'); return; }
+  var d = await post('/api/login', {username:u, password:p});
+  if (d.ok) { ME = {username:u, displayName:u}; fetchMe(); }
+  else showErr(err, d.msg);
+}
+
+async function fetchMe() {
+  var r = await fetch('/api/me');
+  var d = await r.json();
+  if (d.ok) { ME = d.user; startApp(); }
+}
+
+async function doRegister() {
+  var name=v('r-name'), u=v('r-u'), p=v('r-p');
+  var err=document.getElementById('rerr'), ok=document.getElementById('rok');
+  err.style.display='none'; ok.style.display='none';
+  if (!name||!u||!p) { showErr(err,'กรอกให้ครบนะ'); return; }
+  var d = await post('/api/register', {username:u, password:p, displayName:name});
+  if (d.ok) { ME = {username:u, displayName:name}; startApp(); }
+  else showErr(err, d.msg);
+}
+
+async function doLogout() {
+  await post('/api/logout', {});
+  ME = null;
+  if (chatEs) chatEs.close();
+  if (hwEs) hwEs.close();
+  document.getElementById('app').classList.remove('on');
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('l-p').value = '';
+}
+
+// ── APP START ─────────────────────────────────────────
+async function startApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app').classList.add('on');
+
+  // topbar
+  document.getElementById('tb-name').textContent = ME.displayName;
+  document.getElementById('tb-sub').textContent = '';
+  var av = document.getElementById('tb-avatar');
+  av.textContent = ME.displayName.charAt(0).toUpperCase();
+  av.style.background = getColor(ME.username);
+
+  // load initial data
+  await Promise.all([loadChat(), loadHW()]);
+
+  // SSE
+  connectSSE();
+
+  // enter key
+  setupInput('chat-input', sendChat);
+  setupInput('hw-input', sendHW);
+}
+
+function connectSSE() {
+  if (chatEs) chatEs.close();
+  if (hwEs) hwEs.close();
+
+  chatEs = new EventSource('/api/chat/stream');
+  chatEs.onmessage = function(e) {
+    var d = JSON.parse(e.data);
+    if (d.type === 'msg') {
+      chatMsgs.push(d.msg);
+      appendBubble('chat-area', d.msg, false);
+      if (activeTab !== 'chat') document.getElementById('dot-chat').classList.add('show');
+    } else if (d.type === 'delete') {
+      chatMsgs = chatMsgs.filter(m => m.id !== d.id);
+      var el = document.getElementById('bbl-' + d.id);
+      if (el) el.style.animation = 'fadeUp .2s reverse forwards', setTimeout(()=>el.remove(),200);
+    }
+  };
+
+  hwEs = new EventSource('/api/hw/stream');
+  hwEs.onmessage = function(e) {
+    var d = JSON.parse(e.data);
+    if (d.type === 'note') {
+      hwNotes.push(d.note);
+      appendBubble('hw-area', d.note, true);
+      if (activeTab !== 'hw') document.getElementById('dot-hw').classList.add('show');
+    } else if (d.type === 'delete') {
+      hwNotes = hwNotes.filter(n => n.id !== d.id);
+      var el = document.getElementById('bbl-' + d.id);
+      if (el) el.style.animation = 'fadeUp .2s reverse forwards', setTimeout(()=>el.remove(),200);
+    }
+  };
+}
+
+// ── TABS ─────────────────────────────────────────────
+function switchTab(t) {
+  activeTab = t;
+  document.querySelectorAll('.tabbtn').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.tabpage').forEach(p => p.classList.remove('on'));
+  document.getElementById('tab-' + t).classList.add('on');
+  document.getElementById('page-' + t).classList.add('on');
+  document.getElementById('dot-' + t).classList.remove('show');
+  // scroll to bottom
+  setTimeout(function(){ scrollBottom(t==='chat'?'chat-area':'hw-area'); }, 50);
+}
+
+// ── LOAD ─────────────────────────────────────────────
+async function loadChat() {
+  var r = await fetch('/api/chat');
+  chatMsgs = await r.json();
+  renderAll('chat-area', chatMsgs, false);
+}
+async function loadHW() {
+  var r = await fetch('/api/hw');
+  hwNotes = await r.json();
+  renderAll('hw-area', hwNotes, true);
+}
+
+// ── RENDER ────────────────────────────────────────────
+function renderAll(areaId, items, isHw) {
+  var area = document.getElementById(areaId);
+  area.innerHTML = '';
+  if (!items.length) {
+    area.innerHTML = '<div class="empty-state"><div class="ei">'+(isHw?'📝':'💬')+'</div><p>'+(isHw?'ยังไม่มีการบ้าน<br>พิมได้เลย!':'ยังไม่มีข้อความ<br>เริ่มแชทได้เลย!')+'</p></div>';
+    return;
+  }
+  var lastDate = '';
+  var lastUser = '';
+  items.forEach(function(item, idx) {
+    if (item.date !== lastDate) {
+      var sep = document.createElement('div');
+      sep.className = 'date-sep';
+      sep.textContent = item.date;
+      area.appendChild(sep);
+      lastDate = item.date;
+      lastUser = '';
+    }
+    var isFirst = item.username !== lastUser;
+    area.appendChild(makeBubble(item, isFirst));
+    lastUser = item.username;
+  });
+  scrollBottom(areaId);
+}
+
+function appendBubble(areaId, item, isHw) {
+  var area = document.getElementById(areaId);
+  // clear empty state
+  var empty = area.querySelector('.empty-state');
+  if (empty) empty.remove();
+  // check date
+  var last = area.querySelector('.date-sep:last-of-type');
+  if (!last || last.textContent !== item.date) {
+    var sep = document.createElement('div');
+    sep.className = 'date-sep';
+    sep.textContent = item.date;
+    area.appendChild(sep);
+  }
+  // check group
+  var lastRow = area.querySelector('.bubble-row:last-child');
+  var lastUsername = lastRow ? lastRow.dataset.user : '';
+  var isFirst = item.username !== lastUsername;
+  area.appendChild(makeBubble(item, isFirst));
+  scrollBottom(areaId);
+}
+
+function makeBubble(item, isFirst) {
+  var isMe = item.username === ME.username;
+  var row = document.createElement('div');
+  row.className = 'bubble-row ' + (isMe?'me':'other') + (isFirst?' first':'');
+  row.id = 'bbl-' + item.id;
+  row.dataset.user = item.username;
+
+  var av = document.createElement('div');
+  av.className = 'avatar-bubble';
+  av.textContent = item.displayName.charAt(0).toUpperCase();
+  if (isMe) av.style.background = getColor(item.username);
+  else av.style.background = 'linear-gradient(135deg, ' + getColor(item.username) + '55, ' + getColor(item.username) + '22)';
+
+  var wrap = document.createElement('div');
+  wrap.className = 'bubble-wrap';
+
+  var nameEl = document.createElement('div');
+  nameEl.className = 'bubble-name';
+  nameEl.textContent = item.displayName;
+
+  var bbl = document.createElement('div');
+  bbl.className = 'bubble';
+  bbl.textContent = item.text;
+
+  // delete button (only own)
+  if (isMe) {
+    var del = document.createElement('button');
+    del.className = 'bubble-del';
+    del.textContent = 'ลบ';
+    del.onclick = function(e) {
+      e.stopPropagation();
+      var url = row.closest('#chat-area') || document.getElementById('chat-area').contains(row) ? '/api/chat/' : '/api/hw/';
+      // determine which api
+      var isChat = !!document.getElementById('chat-area').querySelector('#bbl-'+item.id);
+      deleteBubble(item.id, isChat ? '/api/chat/' : '/api/hw/');
+    };
+    bbl.appendChild(del);
+  }
+
+  var timeEl = document.createElement('div');
+  timeEl.className = 'bubble-time';
+  timeEl.textContent = item.time;
+
+  wrap.appendChild(nameEl);
+  wrap.appendChild(bbl);
+  wrap.appendChild(timeEl);
+
+  if (isMe) { row.appendChild(wrap); row.appendChild(av); }
+  else       { row.appendChild(av); row.appendChild(wrap); }
+
+  return row;
+}
+
+async function deleteBubble(id, apiPrefix) {
+  var r = await fetch(apiPrefix + id, { method: 'DELETE' });
+  var d = await r.json();
+  if (!d.ok && d.msg) alert(d.msg);
+}
+
+// ── SEND ─────────────────────────────────────────────
+async function sendChat() {
+  var inp = document.getElementById('chat-input');
+  var text = inp.value.trim();
+  if (!text) return;
+  inp.value = ''; autoResize(inp);
+  await post('/api/chat', { text });
+}
+
+async function sendHW() {
+  var inp = document.getElementById('hw-input');
+  var text = inp.value.trim();
+  if (!text) return;
+  inp.value = ''; autoResize(inp);
+  await post('/api/hw', { text });
+}
+
+function setupInput(id, sendFn) {
+  var inp = document.getElementById(id);
+  inp.addEventListener('input', function(){ autoResize(this); });
+  inp.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendFn(); }
+  });
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// ── UTILS ─────────────────────────────────────────────
+function v(id) { return document.getElementById(id).value.trim(); }
+
+async function post(url, body) {
+  var r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+  return r.json();
+}
+
+function showErr(el, msg) { el.textContent = msg; el.style.display = 'block'; }
+
+function scrollBottom(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollTop = el.scrollHeight;
+}
+
+var COLORS = ['#7c6ef5','#f5a623','#4caf91','#e05b7a','#5bc0eb','#c97cf5','#61c5a0','#f5d623'];
+function getColor(username) {
+  var hash = 0;
+  for (var i=0; i<username.length; i++) hash = username.charCodeAt(i) + ((hash<<5)-hash);
+  return COLORS[Math.abs(hash) % COLORS.length];
+}
+
+// enter on login/register
+document.addEventListener('keydown', function(e){
+  if (e.key !== 'Enter') return;
+  var ls = document.getElementById('auth-screen');
+  if (!ls || ls.style.display === 'none') return;
+  if (document.getElementById('pane-login').classList.contains('on')) doLogin();
+  else doRegister();
+});
+</script>
+</body>
+</html>
