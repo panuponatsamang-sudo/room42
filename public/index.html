@@ -2,812 +2,733 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>ห้อง 4/2</title>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&family=Prompt:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&family=Prompt:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d0d14;--bg2:#13131e;--bg3:#1a1a28;--bg4:#222235;--bg5:#2a2a42;
+  --ac:#7c6ef5;--ac2:#9d93ff;--ac3:#c4beff;
+  --hw:#f0a500;--hw2:#ffc145;--hw3:#ffe0a0;
+  --text:#eae8f5;--text2:#9896b8;--text3:#4e4c6a;
+  --border:rgba(124,110,245,0.12);--border2:rgba(124,110,245,0.28);
+  --red:#e05555;--green:#50c878;
+  --r:16px;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
 
-:root {
-  --bg:        #0f0f13;
-  --bg2:       #16161d;
-  --bg3:       #1e1e28;
-  --bg4:       #26263a;
-  --accent:    #7c6ef5;
-  --accent2:   #9d93ff;
-  --accent3:   #c4beff;
-  --hw:        #f5a623;
-  --hw2:       #ffc55a;
-  --text:      #e8e6f0;
-  --text2:     #9b98b0;
-  --text3:     #5e5c78;
-  --border:    rgba(124,110,245,0.15);
-  --border2:   rgba(124,110,245,0.3);
-  --bubble-me: rgba(124,110,245,0.18);
-  --bubble-other: rgba(30,30,40,0.9);
-  --hw-bubble: rgba(245,166,35,0.12);
-  --radius:    14px;
-  --sb: 0 0 0 1px var(--border);
-}
+/* ═══ AUTH ═══════════════════════════════════════════════ */
+#auth{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:var(--bg);z-index:200;
+  background-image:radial-gradient(ellipse 60% 50% at 25% 35%,rgba(124,110,245,0.08) 0%,transparent 70%),
+  radial-gradient(ellipse 50% 60% at 80% 75%,rgba(240,165,0,0.06) 0%,transparent 70%)}
+.acard{width:100%;max-width:390px;margin:16px;
+  background:var(--bg2);border:1px solid var(--border2);border-radius:22px;
+  padding:38px 32px 32px;
+  box-shadow:0 28px 72px rgba(0,0,0,0.55),0 0 0 1px rgba(255,255,255,0.03) inset}
+.alogo{text-align:center;margin-bottom:26px}
+.alogo .ico{font-size:48px;display:block;margin-bottom:10px;filter:drop-shadow(0 0 16px rgba(124,110,245,0.5))}
+.alogo h1{font-family:'Prompt',sans-serif;font-size:24px;font-weight:700;color:var(--ac3)}
+.alogo p{font-size:12px;color:var(--text3);margin-top:4px;letter-spacing:1px}
+.atabs{display:flex;background:var(--bg3);border-radius:12px;padding:3px;margin-bottom:22px}
+.atab{flex:1;padding:9px;text-align:center;border-radius:10px;font-size:14px;font-weight:600;
+  cursor:pointer;color:var(--text3);transition:all .2s;border:none;background:none;font-family:'Sarabun',sans-serif}
+.atab.on{background:var(--ac);color:#fff;box-shadow:0 2px 10px rgba(124,110,245,0.45)}
+.apane{display:none}.apane.on{display:block}
+.aerr{background:rgba(224,85,85,0.12);border:1px solid rgba(224,85,85,0.28);color:#ff9999;
+  font-size:13px;border-radius:10px;padding:10px 14px;margin-bottom:12px;display:none}
+.aok{background:rgba(80,200,120,0.12);border:1px solid rgba(80,200,120,0.25);color:#99ffbb;
+  font-size:13px;border-radius:10px;padding:10px 14px;margin-bottom:12px;display:none}
+.af{margin-bottom:12px}
+.af label{display:block;font-size:10px;color:var(--text3);letter-spacing:1.5px;margin-bottom:5px;font-weight:700}
+.af input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:12px 14px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:15px;
+  outline:none;transition:all .2s}
+.af input:focus{border-color:var(--ac);background:rgba(124,110,245,0.06)}
+.af input::placeholder{color:var(--text3)}
+.abtn{width:100%;margin-top:4px;padding:13px;background:var(--ac);border:none;border-radius:12px;
+  color:#fff;font-family:'Prompt',sans-serif;font-size:15px;font-weight:600;cursor:pointer;
+  transition:all .2s;letter-spacing:0.5px}
+.abtn:hover{background:var(--ac2);transform:translateY(-1px);box-shadow:0 5px 18px rgba(124,110,245,0.45)}
 
-html, body { height:100%; }
+/* ═══ APP ════════════════════════════════════════════════ */
+#app{display:none;flex-direction:column;height:100%}
+#app.on{display:flex}
 
-body {
-  font-family: 'Sarabun', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  height: 100%;
-  overflow: hidden;
-}
+/* TOPBAR */
+.topbar{display:flex;align-items:center;padding:0 14px;height:54px;
+  background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;gap:8px;z-index:10}
+.topbar-brand{font-family:'Prompt',sans-serif;font-size:16px;font-weight:700;color:var(--ac3);flex:1}
+.av-sm{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+.topbar-name{font-size:13px;color:var(--text2)}
+.out-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:5px 10px;
+  color:var(--text3);font-size:12px;cursor:pointer;transition:all .2s;font-family:'Sarabun',sans-serif}
+.out-btn:hover{color:var(--red);border-color:rgba(224,85,85,0.3)}
 
-/* ──── AUTH SCREEN ──────────────────────────────── */
-#auth-screen {
-  position: fixed; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--bg);
-  background-image:
-    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(124,110,245,0.07) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 60% at 75% 70%, rgba(245,166,35,0.05) 0%, transparent 70%);
-  z-index: 100;
-}
+/* TABBAR */
+.tabbar{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0}
+.tabbtn{flex:1;height:46px;display:flex;align-items:center;justify-content:center;gap:6px;
+  font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;color:var(--text3);
+  cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .2s;position:relative}
+.tabbtn.on{color:var(--ac2);border-bottom-color:var(--ac)}
+.tabbtn.hw.on{color:var(--hw2);border-bottom-color:var(--hw)}
+.udot{width:7px;height:7px;border-radius:50%;background:var(--ac);
+  position:absolute;top:8px;right:calc(50% - 30px);display:none}
+.udot.show{display:block}
 
-.auth-card {
-  width: 100%; max-width: 380px;
-  background: var(--bg2);
-  border: 1px solid var(--border2);
-  border-radius: 20px;
-  padding: 36px 32px 32px;
-  margin: 16px;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03) inset;
-}
+/* PAGES */
+.tabpage{display:none;flex-direction:column;flex:1;overflow:hidden}
+.tabpage.on{display:flex}
 
-.auth-logo {
-  text-align: center;
-  margin-bottom: 28px;
-}
-.auth-logo .icon {
-  font-size: 44px;
-  display: block;
-  margin-bottom: 10px;
-  filter: drop-shadow(0 0 12px rgba(124,110,245,0.4));
-}
-.auth-logo h1 {
-  font-family: 'Prompt', sans-serif;
-  font-size: 22px; font-weight: 600;
-  color: var(--accent3);
-  letter-spacing: 0.5px;
-}
-.auth-logo p { font-size: 12px; color: var(--text3); margin-top: 4px; letter-spacing: 1px; }
+/* MESSAGES */
+.msg-area{flex:1;overflow-y:auto;padding:14px 12px 6px;display:flex;flex-direction:column;gap:1px}
+.msg-area::-webkit-scrollbar{width:3px}
+.msg-area::-webkit-scrollbar-thumb{background:var(--bg5);border-radius:3px}
 
-.auth-tabs {
-  display: flex;
-  background: var(--bg3);
-  border-radius: 10px;
-  padding: 3px;
-  margin-bottom: 24px;
-}
-.auth-tab {
-  flex: 1; padding: 9px;
-  text-align: center;
-  border-radius: 8px;
-  font-size: 14px; font-weight: 600;
-  cursor: pointer;
-  color: var(--text3);
-  transition: all .2s;
-  border: none; background: none;
-  font-family: 'Sarabun', sans-serif;
-}
-.auth-tab.on { background: var(--accent); color: #fff; box-shadow: 0 2px 8px rgba(124,110,245,0.4); }
+.dsep{text-align:center;font-size:11px;color:var(--text3);padding:10px 0 4px;letter-spacing:0.5px;position:relative}
+.dsep::before,.dsep::after{content:'';position:absolute;top:55%;height:1px;background:var(--border);width:calc(50% - 65px)}
+.dsep::before{left:0}.dsep::after{right:0}
 
-.auth-pane { display: none; }
-.auth-pane.on { display: block; }
+/* BUBBLE */
+.brow{display:flex;align-items:flex-end;gap:6px;margin-top:2px;animation:fadeUp .18s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.brow.me{flex-direction:row-reverse}
+.brow.me+.brow.me .bav,.brow.ot+.brow.ot .bav{opacity:0;pointer-events:none}
 
-.auth-err {
-  background: rgba(200,50,50,0.15);
-  border: 1px solid rgba(200,50,50,0.3);
-  color: #ff9999; font-size: 13px;
-  border-radius: 8px; padding: 10px 13px;
-  margin-bottom: 14px; display: none;
-}
-.auth-ok {
-  background: rgba(100,200,100,0.1);
-  border: 1px solid rgba(100,200,100,0.25);
-  color: #99ffaa; font-size: 13px;
-  border-radius: 8px; padding: 10px 13px;
-  margin-bottom: 14px; display: none;
-}
+.bav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;flex-shrink:0;border:1px solid var(--border)}
 
-.afield { margin-bottom: 13px; }
-.afield label { display:block; font-size:11px; color:var(--text3); letter-spacing:1.5px; margin-bottom:5px; font-weight:600; }
-.afield input {
-  width: 100%;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 11px 14px;
-  color: var(--text);
-  font-family: 'Sarabun', sans-serif;
-  font-size: 15px;
-  outline: none;
-  transition: all .2s;
-}
-.afield input:focus { border-color: var(--accent); background: rgba(124,110,245,0.06); }
-.afield input::placeholder { color: var(--text3); }
+.bwrap{max-width:min(74%,500px);display:flex;flex-direction:column}
+.brow.me .bwrap{align-items:flex-end}
 
-.abtn {
-  width: 100%; margin-top: 4px;
-  padding: 13px;
-  background: var(--accent);
-  border: none; border-radius: 10px;
-  color: #fff;
-  font-family: 'Prompt', sans-serif;
-  font-size: 15px; font-weight: 600;
-  cursor: pointer;
-  transition: all .2s;
-  letter-spacing: 0.5px;
-}
-.abtn:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(124,110,245,0.4); }
-.abtn:active { transform: none; }
+.bname{font-size:11px;color:var(--text3);padding:0 4px 3px;font-weight:600;display:none}
+.brow.first .bname{display:block}
 
-/* ──── APP SHELL ──────────────────────────────── */
-#app {
-  display: none;
-  flex-direction: column;
-  height: 100%;
-}
-#app.on { display: flex; }
+.bubble{background:var(--bg3);border:1px solid var(--border);border-radius:18px 18px 18px 4px;
+  padding:10px 13px;font-size:15px;line-height:1.55;color:var(--text);word-break:break-word;
+  position:relative;display:inline-block;max-width:100%;cursor:default}
+.brow.me .bubble{background:rgba(124,110,245,0.16);border-color:rgba(124,110,245,0.22);
+  border-radius:18px 18px 4px 18px}
+.hw-page .brow.ot .bubble{background:rgba(240,165,0,0.1);border-color:rgba(240,165,0,0.2)}
+.hw-page .brow.me .bubble{background:rgba(240,165,0,0.14);border-color:rgba(240,165,0,0.28)}
 
-/* TOP BAR */
-.topbar {
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  height: 56px;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-  gap: 8px;
-  position: relative;
-  z-index: 10;
-}
-.topbar-brand {
-  font-family: 'Prompt', sans-serif;
-  font-size: 16px; font-weight: 600;
-  color: var(--accent3);
-  flex: 1;
-}
-.topbar-brand span { color: var(--text3); font-size: 12px; font-weight: 400; margin-left: 6px; }
-.topbar-user {
-  font-size: 13px; color: var(--text2);
-  display: flex; align-items: center; gap: 8px;
-}
-.avatar-sm {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 700; color: #fff;
-  flex-shrink: 0;
-}
-.logout-btn {
-  background: none; border: 1px solid var(--border);
-  border-radius: 8px; padding: 5px 10px;
-  color: var(--text3); font-size: 12px;
-  cursor: pointer; transition: all .2s;
-  font-family: 'Sarabun', sans-serif;
-}
-.logout-btn:hover { color: #ff8888; border-color: rgba(200,50,50,0.3); }
+/* image in bubble */
+.bubble img{max-width:220px;max-height:220px;border-radius:10px;display:block;margin-top:4px;cursor:pointer;object-fit:cover}
+.bubble img:first-child{margin-top:0}
 
-/* TAB BAR */
-.tabbar {
-  display: flex;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.tabbtn {
-  flex: 1; padding: 0 12px;
-  height: 46px;
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px; font-weight: 600;
-  color: var(--text3);
-  cursor: pointer;
-  border: none; background: none;
-  border-bottom: 2px solid transparent;
-  transition: all .2s;
-  position: relative;
-}
-.tabbtn.on { color: var(--accent2); border-bottom-color: var(--accent); }
-.tabbtn.hw-tab.on { color: var(--hw2); border-bottom-color: var(--hw); }
-.tabbtn:hover:not(.on) { color: var(--text); }
-.unread-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--accent);
-  position: absolute; top: 9px; right: calc(50% - 28px);
-  display: none;
-}
-.unread-dot.show { display: block; }
+/* audio in bubble */
+.bubble audio{display:block;margin-top:4px;max-width:240px;width:100%}
+audio{accent-color:var(--ac)}
+.hw-page audio{accent-color:var(--hw)}
 
-/* TAB PAGES */
-.tabpage { display: none; flex-direction: column; flex: 1; overflow: hidden; }
-.tabpage.on { display: flex; }
+/* file in bubble */
+.file-chip{display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,0.25);
+  border:1px solid var(--border2);border-radius:10px;padding:8px 12px;margin-top:4px;text-decoration:none;color:var(--text)}
+.file-chip:hover{background:rgba(124,110,245,0.12)}
+.file-chip .fi{font-size:20px}
+.file-chip .fn{font-size:12px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* MESSAGE AREA */
-.msg-area {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px 12px 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  scroll-behavior: smooth;
-}
-.msg-area::-webkit-scrollbar { width: 4px; }
-.msg-area::-webkit-scrollbar-track { background: transparent; }
-.msg-area::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 4px; }
+.btime{font-size:10px;color:var(--text3);padding:2px 4px 0}
+.brow.ot .btime{text-align:left}.brow.me .btime{text-align:right}
+.edited-tag{font-size:10px;color:var(--text3);font-style:italic}
 
-/* date divider */
-.date-sep {
-  text-align: center;
-  font-size: 11px;
-  color: var(--text3);
-  letter-spacing: 1px;
-  padding: 12px 0 6px;
-  position: relative;
-}
-.date-sep::before, .date-sep::after {
-  content: '';
-  position: absolute;
-  top: 50%; transform: translateY(-50%);
-  height: 1px; background: var(--border);
-  width: calc(50% - 70px);
-}
-.date-sep::before { left: 0; }
-.date-sep::after  { right: 0; }
+/* bubble actions on hover */
+.bactions{position:absolute;display:flex;gap:4px;opacity:0;pointer-events:none;transition:opacity .15s;z-index:5}
+.brow.me .bactions{right:calc(100% + 6px);top:50%;transform:translateY(-50%)}
+.brow.ot .bactions{left:calc(100% + 6px);top:50%;transform:translateY(-50%)}
+.bubble:hover .bactions{opacity:1;pointer-events:auto}
+.bact{background:var(--bg4);border:1px solid var(--border2);border-radius:8px;padding:4px 8px;
+  font-size:12px;color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .15s}
+.bact:hover{background:var(--bg5);color:var(--text)}
+.bact.del:hover{color:var(--red);border-color:rgba(224,85,85,0.3)}
 
-/* bubbles */
-.bubble-row {
-  display: flex;
-  align-items: flex-end;
-  gap: 7px;
-  margin-top: 2px;
-  animation: fadeUp .2s ease;
-}
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(6px); }
-  to   { opacity:1; transform:none; }
-}
-.bubble-row.me { flex-direction: row-reverse; }
-.bubble-row.me + .bubble-row.me .avatar-bubble,
-.bubble-row.other + .bubble-row.other .avatar-bubble { opacity: 0; }
-
-.avatar-bubble {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--bg4), var(--bg3));
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; color: var(--text2);
-  flex-shrink: 0;
-}
-.bubble-row.me .avatar-bubble {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff;
-}
-
-.bubble-wrap { max-width: min(72%, 480px); }
-.bubble-row.me .bubble-wrap { align-items: flex-end; }
-
-.bubble-name {
-  font-size: 11px; color: var(--text3);
-  padding: 0 4px 3px;
-  font-weight: 600;
-  display: none;
-}
-/* show name only on first in group */
-.bubble-row.first .bubble-name { display: block; }
-
-.bubble {
-  background: var(--bubble-other);
-  border: 1px solid var(--border);
-  border-radius: 18px 18px 18px 4px;
-  padding: 10px 14px;
-  font-size: 15px;
-  line-height: 1.5;
-  color: var(--text);
-  word-break: break-word;
-  position: relative;
-  display: inline-block;
-  max-width: 100%;
-}
-.bubble-row.me .bubble {
-  background: var(--bubble-me);
-  border-color: rgba(124,110,245,0.25);
-  border-radius: 18px 18px 4px 18px;
-}
-
-/* hw bubble styling */
-.hw-page .bubble-row:not(.me) .bubble {
-  background: var(--hw-bubble);
-  border-color: rgba(245,166,35,0.2);
-}
-.hw-page .bubble-row.me .bubble {
-  background: rgba(245,166,35,0.15);
-  border-color: rgba(245,166,35,0.3);
-}
-
-.bubble-time {
-  font-size: 10px; color: var(--text3);
-  padding: 2px 4px 0;
-  text-align: right;
-}
-.bubble-row.other .bubble-time { text-align: left; }
-
-.bubble-del {
-  position: absolute;
-  top: 50%; transform: translateY(-50%);
-  background: rgba(200,50,50,0.15);
-  border: 1px solid rgba(200,50,50,0.25);
-  border-radius: 6px;
-  padding: 3px 6px;
-  font-size: 11px; color: #ff8888;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity .15s;
-  white-space: nowrap;
-}
-.bubble-row.me .bubble-del  { right: calc(100% + 8px); }
-.bubble-row.other .bubble-del { left: calc(100% + 8px); }
-.bubble:hover .bubble-del { opacity: 1; }
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;gap:6px;padding:6px 12px 2px;flex-shrink:0;flex-wrap:wrap}
+.tool-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:5px 10px;font-size:13px;color:var(--text2);cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:4px;font-family:'Sarabun',sans-serif}
+.tool-btn:hover{border-color:var(--border2);color:var(--text)}
+.tool-btn.on{background:rgba(124,110,245,0.15);border-color:var(--ac);color:var(--ac2)}
+.hw-page .tool-btn.on{background:rgba(240,165,0,0.12);border-color:var(--hw);color:var(--hw2)}
+.color-pick{width:24px;height:24px;border-radius:50%;border:2px solid var(--border2);
+  cursor:pointer;padding:0;background:none}
+.size-sel{background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:5px 8px;font-size:13px;color:var(--text2);cursor:pointer;outline:none;font-family:'Sarabun',sans-serif}
+.size-sel option{background:var(--bg2)}
 
 /* INPUT BAR */
-.input-bar {
-  padding: 10px 12px;
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-  flex-shrink: 0;
-}
-.msg-input {
-  flex: 1;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 10px 16px;
-  color: var(--text);
-  font-family: 'Sarabun', sans-serif;
-  font-size: 15px;
-  outline: none;
-  resize: none;
-  max-height: 120px;
-  min-height: 42px;
-  line-height: 1.45;
-  transition: border-color .2s;
-  overflow-y: auto;
-}
-.msg-input:focus { border-color: var(--accent); }
-.hw-page .msg-input:focus { border-color: var(--hw); }
-.msg-input::placeholder { color: var(--text3); }
+.input-bar{padding:8px 12px 10px;background:var(--bg2);border-top:1px solid var(--border);
+  display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
+.msg-inp{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:18px;
+  padding:10px 16px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:15px;
+  outline:none;resize:none;max-height:110px;min-height:42px;line-height:1.45;transition:border-color .2s;overflow-y:auto}
+.msg-inp:focus{border-color:var(--ac)}
+.hw-page .msg-inp:focus{border-color:var(--hw)}
+.msg-inp::placeholder{color:var(--text3)}
+.send-btn{width:42px;height:42px;border-radius:50%;background:var(--ac);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;
+  transition:all .2s;box-shadow:0 2px 10px rgba(124,110,245,0.4)}
+.send-btn:hover{background:var(--ac2);transform:scale(1.06)}
+.send-btn:active{transform:scale(0.95)}
+.hw-page .send-btn{background:var(--hw);box-shadow:0 2px 10px rgba(240,165,0,0.4)}
+.hw-page .send-btn:hover{background:var(--hw2)}
 
-.send-btn {
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  background: var(--accent);
-  border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-  transition: all .2s;
-  box-shadow: 0 2px 8px rgba(124,110,245,0.35);
-}
-.send-btn:hover { background: var(--accent2); transform: scale(1.05); }
-.send-btn:active { transform: scale(0.95); }
-.hw-page .send-btn { background: var(--hw); box-shadow: 0 2px 8px rgba(245,166,35,0.35); }
-.hw-page .send-btn:hover { background: var(--hw2); }
+/* icon btns in input bar */
+.ibar-btn{width:36px;height:36px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0;
+  transition:all .15s}
+.ibar-btn:hover{border-color:var(--border2);background:var(--bg4)}
 
-/* empty state */
-.empty-state {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  color: var(--text3); gap: 10px;
-  padding: 40px 20px;
-}
-.empty-state .ei { font-size: 40px; opacity: 0.4; }
-.empty-state p { font-size: 14px; letter-spacing: 0.5px; text-align: center; }
+/* RECORDING indicator */
+.rec-bar{display:none;align-items:center;gap:10px;padding:10px 16px;
+  background:rgba(224,85,85,0.1);border-top:1px solid rgba(224,85,85,0.2);flex-shrink:0}
+.rec-bar.on{display:flex}
+.rec-dot{width:10px;height:10px;border-radius:50%;background:var(--red);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.rec-time{font-family:'Prompt',sans-serif;font-size:14px;color:var(--red);flex:1}
+.rec-stop{background:var(--red);border:none;border-radius:10px;padding:6px 14px;
+  color:#fff;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+
+/* EMPTY */
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--text3);gap:10px;padding:40px}
+.empty .ei{font-size:44px;opacity:0.35}
+.empty p{font-size:14px;text-align:center}
+
+/* IMAGE VIEWER */
+#img-viewer{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:300;
+  display:none;align-items:center;justify-content:center}
+#img-viewer.on{display:flex}
+#img-viewer img{max-width:95vw;max-height:90vh;border-radius:12px;object-fit:contain}
+#img-viewer-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);
+  border:none;border-radius:50%;width:40px;height:40px;font-size:20px;color:#fff;cursor:pointer}
+
+/* EDIT MODAL */
+#edit-modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;
+  display:none;align-items:center;justify-content:center}
+#edit-modal.on{display:flex}
+.edit-card{background:var(--bg3);border:1px solid var(--border2);border-radius:18px;
+  padding:22px;width:90%;max-width:420px}
+.edit-card h3{font-family:'Prompt',sans-serif;font-size:16px;color:var(--ac3);margin-bottom:14px}
+.edit-card textarea{width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:10px;
+  padding:11px 14px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:15px;
+  outline:none;resize:vertical;min-height:80px}
+.edit-card textarea:focus{border-color:var(--ac)}
+.edit-btns{display:flex;gap:8px;margin-top:12px;justify-content:flex-end}
+.ebtn{padding:9px 18px;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none}
+.ebtn-save{background:var(--ac);color:#fff}
+.ebtn-cancel{background:var(--bg4);color:var(--text2);border:1px solid var(--border)}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;padding:12px 18px;border-radius:10px;
+  font-size:14px;font-weight:700;z-index:9999;opacity:0;transform:translateY(6px);
+  transition:all .25s;pointer-events:none;border-left:3px solid;max-width:280px}
+.toast.show{opacity:1;transform:none}
+.toast.ok{background:rgba(20,50,20,0.97);border-left-color:var(--green);color:#99ffcc}
+.toast.err{background:rgba(50,10,10,0.97);border-left-color:var(--red);color:#ffaaaa}
 
 /* mobile */
-@media(max-width: 480px) {
-  .auth-card { padding: 28px 22px 24px; }
-  .bubble { font-size: 14px; }
-  .msg-input { font-size: 14px; }
-  .topbar-user .name-text { display: none; }
+@media(max-width:500px){
+  .acard{padding:28px 20px 24px}
+  .topbar-name{display:none}
+  .toolbar{gap:4px}
 }
 </style>
 </head>
 <body>
 
-<!-- ══ AUTH ══════════════════════════════════════════ -->
-<div id="auth-screen">
-<div class="auth-card">
-  <div class="auth-logo">
-    <span class="icon">📚</span>
+<!-- ═══ AUTH ═══════════════════════════════════════════ -->
+<div id="auth">
+<div class="acard">
+  <div class="alogo">
+    <span class="ico">📚</span>
     <h1>ห้อง 4/2</h1>
     <p>แชท · บันทึกการบ้าน</p>
   </div>
-
-  <div class="auth-tabs">
-    <button class="auth-tab on" onclick="authTab('login')">เข้าสู่ระบบ</button>
-    <button class="auth-tab" onclick="authTab('reg')">สมัครสมาชิก</button>
+  <div class="atabs">
+    <button class="atab on" onclick="authTab('login')">เข้าสู่ระบบ</button>
+    <button class="atab" onclick="authTab('reg')">สมัครสมาชิก</button>
   </div>
-
-  <!-- LOGIN -->
-  <div class="auth-pane on" id="pane-login">
-    <div class="auth-err" id="lerr"></div>
-    <div class="afield"><label>USERNAME</label><input id="l-u" type="text" placeholder="ชื่อผู้ใช้" autocomplete="username"></div>
-    <div class="afield"><label>รหัสผ่าน</label><input id="l-p" type="password" placeholder="••••••" autocomplete="current-password"></div>
+  <div class="apane on" id="pane-login">
+    <div class="aerr" id="lerr"></div>
+    <div class="af"><label>USERNAME</label><input id="lu" type="text" placeholder="ชื่อผู้ใช้" autocomplete="username"></div>
+    <div class="af"><label>รหัสผ่าน</label><input id="lp" type="password" placeholder="••••••" autocomplete="current-password"></div>
     <button class="abtn" onclick="doLogin()">เข้าสู่ระบบ →</button>
   </div>
-
-  <!-- REGISTER -->
-  <div class="auth-pane" id="pane-reg">
-    <div class="auth-err" id="rerr"></div>
-    <div class="auth-ok" id="rok"></div>
-    <div class="afield"><label>ชื่อ-นามสกุล / ชื่อเล่น</label><input id="r-name" type="text" placeholder="ชื่อที่แสดงในแชท"></div>
-    <div class="afield"><label>USERNAME</label><input id="r-u" type="text" placeholder="อย่างน้อย 2 ตัว" autocomplete="username"></div>
-    <div class="afield"><label>รหัสผ่าน</label><input id="r-p" type="password" placeholder="อย่างน้อย 4 ตัว"></div>
+  <div class="apane" id="pane-reg">
+    <div class="aerr" id="rerr"></div>
+    <div class="aok" id="rok"></div>
+    <div class="af"><label>ชื่อ-นามสกุล / ชื่อเล่น</label><input id="rname" type="text" placeholder="ชื่อที่แสดงในแชท"></div>
+    <div class="af"><label>USERNAME</label><input id="ru" type="text" placeholder="อย่างน้อย 2 ตัว" autocomplete="username"></div>
+    <div class="af"><label>รหัสผ่าน</label><input id="rp" type="password" placeholder="อย่างน้อย 4 ตัว"></div>
     <button class="abtn" onclick="doRegister()">สมัครสมาชิก ✓</button>
   </div>
 </div>
 </div>
 
-<!-- ══ APP ═══════════════════════════════════════════ -->
+<!-- ═══ APP ══════════════════════════════════════════════ -->
 <div id="app">
-  <!-- TOP BAR -->
   <div class="topbar">
-    <div class="topbar-brand">ห้อง 4/2 <span id="tb-sub"></span></div>
-    <div class="topbar-user">
-      <span class="name-text" id="tb-name"></span>
-      <div class="avatar-sm" id="tb-avatar"></div>
-      <button class="logout-btn" onclick="doLogout()">ออก</button>
-    </div>
+    <div class="topbar-brand">ห้อง 4/2</div>
+    <span class="topbar-name" id="tb-name"></span>
+    <div class="av-sm" id="tb-av"></div>
+    <button class="out-btn" onclick="doLogout()">ออก</button>
   </div>
-
-  <!-- TAB BAR -->
   <div class="tabbar">
-    <button class="tabbtn on" id="tab-chat" onclick="switchTab('chat')">
-      💬 แชท
-      <span class="unread-dot" id="dot-chat"></span>
-    </button>
-    <button class="tabbtn hw-tab" id="tab-hw" onclick="switchTab('hw')">
-      📝 การบ้าน
-      <span class="unread-dot" id="dot-hw" style="background:var(--hw)"></span>
-    </button>
+    <button class="tabbtn on" id="tab-chat" onclick="switchTab('chat')">💬 แชท<span class="udot" id="dot-chat"></span></button>
+    <button class="tabbtn hw" id="tab-hw" onclick="switchTab('hw')">📝 การบ้าน<span class="udot" id="dot-hw" style="background:var(--hw)"></span></button>
   </div>
 
-  <!-- CHAT PAGE -->
+  <!-- CHAT -->
   <div class="tabpage on" id="page-chat">
     <div class="msg-area" id="chat-area"></div>
-    <div class="input-bar">
-      <textarea class="msg-input" id="chat-input" placeholder="พิมข้อความ..." rows="1"></textarea>
-      <button class="send-btn" onclick="sendChat()">➤</button>
+    <div class="toolbar" id="chat-toolbar">
+      <button class="tool-btn" id="bold-btn" onclick="toggleStyle('bold')" title="ตัวหนา"><b>B</b></button>
+      <button class="tool-btn" id="italic-btn" onclick="toggleStyle('italic')" title="ตัวเอียง"><i>I</i></button>
+      <select class="size-sel" id="chat-size" title="ขนาดตัวอักษร">
+        <option value="13">เล็ก</option>
+        <option value="15" selected>ปกติ</option>
+        <option value="18">ใหญ่</option>
+        <option value="22">ใหญ่มาก</option>
+      </select>
+      <input type="color" class="color-pick" id="chat-color" value="#eae8f5" title="สีข้อความ">
     </div>
+    <div class="rec-bar" id="chat-rec">
+      <span class="rec-dot"></span>
+      <span class="rec-time" id="chat-rec-time">0:00</span>
+      <button class="rec-stop" onclick="stopRecord('chat')">⏹ หยุด & ส่ง</button>
+    </div>
+    <div class="input-bar">
+      <button class="ibar-btn" onclick="triggerFile('chat')" title="ส่งรูป/ไฟล์">📎</button>
+      <button class="ibar-btn" onclick="startRecord('chat')" title="อัดเสียง">🎙️</button>
+      <textarea class="msg-inp" id="chat-inp" placeholder="พิมข้อความ..." rows="1"></textarea>
+      <button class="send-btn" onclick="sendMsg('chat')">➤</button>
+    </div>
+    <input type="file" id="file-chat" style="display:none" accept="image/*,audio/*,.pdf,.doc,.docx,.zip" onchange="onFileSelect(event,'chat')">
   </div>
 
-  <!-- HOMEWORK PAGE -->
+  <!-- HOMEWORK -->
   <div class="tabpage" id="page-hw">
     <div class="msg-area" id="hw-area"></div>
+    <div class="toolbar" id="hw-toolbar">
+      <button class="tool-btn" id="hw-bold-btn" onclick="toggleStyle('bold','hw')" title="ตัวหนา"><b>B</b></button>
+      <button class="tool-btn" id="hw-italic-btn" onclick="toggleStyle('italic','hw')" title="ตัวเอียง"><i>I</i></button>
+      <select class="size-sel" id="hw-size" title="ขนาดตัวอักษร">
+        <option value="13">เล็ก</option>
+        <option value="15" selected>ปกติ</option>
+        <option value="18">ใหญ่</option>
+        <option value="22">ใหญ่มาก</option>
+      </select>
+      <input type="color" class="color-pick" id="hw-color" value="#eae8f5" title="สีข้อความ">
+    </div>
+    <div class="rec-bar" id="hw-rec">
+      <span class="rec-dot"></span>
+      <span class="rec-time" id="hw-rec-time">0:00</span>
+      <button class="rec-stop" onclick="stopRecord('hw')">⏹ หยุด & ส่ง</button>
+    </div>
     <div class="input-bar">
-      <textarea class="msg-input" id="hw-input" placeholder="บันทึกการบ้าน... เช่น คณิต หน้า 45 ข้อ 1-10" rows="1" style="border-color:rgba(245,166,35,0.2)"></textarea>
-      <button class="send-btn" onclick="sendHW()" style="background:var(--hw);box-shadow:0 2px 8px rgba(245,166,35,0.35)">➤</button>
+      <button class="ibar-btn" onclick="triggerFile('hw')" title="ส่งรูป/ไฟล์">📎</button>
+      <button class="ibar-btn" onclick="startRecord('hw')" title="อัดเสียง">🎙️</button>
+      <textarea class="msg-inp" id="hw-inp" placeholder="บันทึกการบ้าน... เช่น คณิต หน้า 45" rows="1" style="border-color:rgba(240,165,0,0.2)"></textarea>
+      <button class="send-btn" onclick="sendMsg('hw')">➤</button>
+    </div>
+    <input type="file" id="file-hw" style="display:none" accept="image/*,audio/*,.pdf,.doc,.docx,.zip" onchange="onFileSelect(event,'hw')">
+  </div>
+</div>
+
+<!-- IMAGE VIEWER -->
+<div id="img-viewer" onclick="closeImgViewer()">
+  <button id="img-viewer-close" onclick="closeImgViewer()">✕</button>
+  <img id="img-viewer-img" src="" alt="">
+</div>
+
+<!-- EDIT MODAL -->
+<div id="edit-modal">
+  <div class="edit-card">
+    <h3>✏️ แก้ไขข้อความ</h3>
+    <textarea id="edit-text" rows="3"></textarea>
+    <div class="edit-btns">
+      <button class="ebtn ebtn-cancel" onclick="closeEdit()">ยกเลิก</button>
+      <button class="ebtn ebtn-save" onclick="submitEdit()">💾 บันทึก</button>
     </div>
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
 var ME = null;
-var chatMsgs = [];
-var hwNotes  = [];
-var chatEs = null;
-var hwEs   = null;
+var chatMsgs = [], hwNotes = [];
+var chatEs = null, hwEs = null;
 var activeTab = 'chat';
+var mediaRecorder = null, recChunks = [], recTarget = null, recTimer = null, recSecs = 0;
+var editTarget = { id: null, tab: null };
+var styleState = { chat: { bold:false, italic:false }, hw: { bold:false, italic:false } };
 
-// ── INIT ─────────────────────────────────────────────
+// ═══ INIT ═══════════════════════════════════════════════
 (async function(){
-  var r = await fetch('/api/me');
-  var d = await r.json();
+  var r = await fetch('/api/me'), d = await r.json();
   if (d.ok) { ME = d.user; startApp(); }
 })();
 
-// ── AUTH ─────────────────────────────────────────────
+// ═══ AUTH ════════════════════════════════════════════════
 function authTab(t) {
-  document.querySelectorAll('.auth-tab').forEach((b,i) => b.classList.toggle('on', (i===0&&t==='login')||(i===1&&t==='reg')));
-  document.getElementById('pane-login').classList.toggle('on', t==='login');
-  document.getElementById('pane-reg').classList.toggle('on', t==='reg');
+  document.querySelectorAll('.atab').forEach((b,i)=>b.classList.toggle('on',(i===0&&t==='login')||(i===1&&t==='reg')));
+  document.getElementById('pane-login').classList.toggle('on',t==='login');
+  document.getElementById('pane-reg').classList.toggle('on',t==='reg');
 }
-
 async function doLogin() {
-  var u = v('l-u'), p = v('l-p');
-  var err = document.getElementById('lerr');
-  err.style.display = 'none';
-  if (!u||!p) { showErr(err,'กรอกให้ครบนะ'); return; }
-  var d = await post('/api/login', {username:u, password:p});
-  if (d.ok) { ME = {username:u, displayName:u}; fetchMe(); }
-  else showErr(err, d.msg);
+  var u=g('lu').value.trim(), p=g('lp').value;
+  var err=g('lerr'); err.style.display='none';
+  if(!u||!p){showEl(err,'กรอกให้ครบนะ');return;}
+  var d=await post('/api/login',{username:u,password:p});
+  if(d.ok){var m=await fetch('/api/me');var md=await m.json();ME=md.user;startApp();}
+  else showEl(err,d.msg);
 }
-
-async function fetchMe() {
-  var r = await fetch('/api/me');
-  var d = await r.json();
-  if (d.ok) { ME = d.user; startApp(); }
-}
-
 async function doRegister() {
-  var name=v('r-name'), u=v('r-u'), p=v('r-p');
-  var err=document.getElementById('rerr'), ok=document.getElementById('rok');
-  err.style.display='none'; ok.style.display='none';
-  if (!name||!u||!p) { showErr(err,'กรอกให้ครบนะ'); return; }
-  var d = await post('/api/register', {username:u, password:p, displayName:name});
-  if (d.ok) { ME = {username:u, displayName:name}; startApp(); }
-  else showErr(err, d.msg);
+  var name=g('rname').value.trim(),u=g('ru').value.trim(),p=g('rp').value;
+  var err=g('rerr'),ok=g('rok');err.style.display='none';ok.style.display='none';
+  if(!name||!u||!p){showEl(err,'กรอกให้ครบนะ');return;}
+  var d=await post('/api/register',{username:u,password:p,displayName:name});
+  if(d.ok){ME={username:u,displayName:name};startApp();}
+  else showEl(err,d.msg);
 }
-
 async function doLogout() {
-  await post('/api/logout', {});
-  ME = null;
-  if (chatEs) chatEs.close();
-  if (hwEs) hwEs.close();
-  document.getElementById('app').classList.remove('on');
-  document.getElementById('auth-screen').style.display = 'flex';
-  document.getElementById('l-p').value = '';
+  await post('/api/logout',{});ME=null;
+  if(chatEs)chatEs.close();if(hwEs)hwEs.close();
+  g('app').classList.remove('on');g('auth').style.display='flex';
+  g('lp').value='';
 }
 
-// ── APP START ─────────────────────────────────────────
+// ═══ APP ═════════════════════════════════════════════════
 async function startApp() {
-  document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('app').classList.add('on');
-
-  // topbar
-  document.getElementById('tb-name').textContent = ME.displayName;
-  document.getElementById('tb-sub').textContent = '';
-  var av = document.getElementById('tb-avatar');
-  av.textContent = ME.displayName.charAt(0).toUpperCase();
-  av.style.background = getColor(ME.username);
-
-  // load initial data
-  await Promise.all([loadChat(), loadHW()]);
-
-  // SSE
+  g('auth').style.display='none';g('app').classList.add('on');
+  g('tb-name').textContent=ME.displayName;
+  var av=g('tb-av');av.textContent=ME.displayName.charAt(0).toUpperCase();av.style.background=getColor(ME.username);
+  await Promise.all([loadChat(),loadHW()]);
   connectSSE();
-
-  // enter key
-  setupInput('chat-input', sendChat);
-  setupInput('hw-input', sendHW);
+  setupInp('chat-inp',()=>sendMsg('chat'));
+  setupInp('hw-inp',()=>sendMsg('hw'));
 }
 
 function connectSSE() {
-  if (chatEs) chatEs.close();
-  if (hwEs) hwEs.close();
-
-  chatEs = new EventSource('/api/chat/stream');
-  chatEs.onmessage = function(e) {
-    var d = JSON.parse(e.data);
-    if (d.type === 'msg') {
-      chatMsgs.push(d.msg);
-      appendBubble('chat-area', d.msg, false);
-      if (activeTab !== 'chat') document.getElementById('dot-chat').classList.add('show');
-    } else if (d.type === 'delete') {
-      chatMsgs = chatMsgs.filter(m => m.id !== d.id);
-      var el = document.getElementById('bbl-' + d.id);
-      if (el) el.style.animation = 'fadeUp .2s reverse forwards', setTimeout(()=>el.remove(),200);
-    }
+  if(chatEs)chatEs.close();if(hwEs)hwEs.close();
+  chatEs=new EventSource('/api/chat/stream');
+  chatEs.onmessage=function(e){
+    var d=JSON.parse(e.data);
+    if(d.type==='msg'){chatMsgs.push(d.msg);appendBubble('chat-area',d.msg);if(activeTab!=='chat')g('dot-chat').classList.add('show');}
+    else if(d.type==='edit'){updateBubble(d.id,d.text,d.style);}
+    else if(d.type==='delete'){removeBubble(d.id);}
   };
-
-  hwEs = new EventSource('/api/hw/stream');
-  hwEs.onmessage = function(e) {
-    var d = JSON.parse(e.data);
-    if (d.type === 'note') {
-      hwNotes.push(d.note);
-      appendBubble('hw-area', d.note, true);
-      if (activeTab !== 'hw') document.getElementById('dot-hw').classList.add('show');
-    } else if (d.type === 'delete') {
-      hwNotes = hwNotes.filter(n => n.id !== d.id);
-      var el = document.getElementById('bbl-' + d.id);
-      if (el) el.style.animation = 'fadeUp .2s reverse forwards', setTimeout(()=>el.remove(),200);
-    }
+  hwEs=new EventSource('/api/hw/stream');
+  hwEs.onmessage=function(e){
+    var d=JSON.parse(e.data);
+    if(d.type==='note'){hwNotes.push(d.note);appendBubble('hw-area',d.note);if(activeTab!=='hw')g('dot-hw').classList.add('show');}
+    else if(d.type==='edit'){updateBubble(d.id,d.text,d.style);}
+    else if(d.type==='delete'){removeBubble(d.id);}
   };
 }
 
-// ── TABS ─────────────────────────────────────────────
+// ═══ TABS ════════════════════════════════════════════════
 function switchTab(t) {
-  activeTab = t;
-  document.querySelectorAll('.tabbtn').forEach(b => b.classList.remove('on'));
-  document.querySelectorAll('.tabpage').forEach(p => p.classList.remove('on'));
-  document.getElementById('tab-' + t).classList.add('on');
-  document.getElementById('page-' + t).classList.add('on');
-  document.getElementById('dot-' + t).classList.remove('show');
-  // scroll to bottom
-  setTimeout(function(){ scrollBottom(t==='chat'?'chat-area':'hw-area'); }, 50);
+  activeTab=t;
+  document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.tabpage').forEach(p=>p.classList.remove('on'));
+  g('tab-'+t).classList.add('on');g('page-'+t).classList.add('on');
+  g('dot-'+t).classList.remove('show');
+  setTimeout(()=>scrollBot(t==='chat'?'chat-area':'hw-area'),50);
 }
 
-// ── LOAD ─────────────────────────────────────────────
-async function loadChat() {
-  var r = await fetch('/api/chat');
-  chatMsgs = await r.json();
-  renderAll('chat-area', chatMsgs, false);
-}
-async function loadHW() {
-  var r = await fetch('/api/hw');
-  hwNotes = await r.json();
-  renderAll('hw-area', hwNotes, true);
-}
+// ═══ LOAD ════════════════════════════════════════════════
+async function loadChat(){var r=await fetch('/api/chat');chatMsgs=await r.json();renderAll('chat-area',chatMsgs);}
+async function loadHW(){var r=await fetch('/api/hw');hwNotes=await r.json();renderAll('hw-area',hwNotes);}
 
-// ── RENDER ────────────────────────────────────────────
-function renderAll(areaId, items, isHw) {
-  var area = document.getElementById(areaId);
-  area.innerHTML = '';
-  if (!items.length) {
-    area.innerHTML = '<div class="empty-state"><div class="ei">'+(isHw?'📝':'💬')+'</div><p>'+(isHw?'ยังไม่มีการบ้าน<br>พิมได้เลย!':'ยังไม่มีข้อความ<br>เริ่มแชทได้เลย!')+'</p></div>';
+// ═══ RENDER ══════════════════════════════════════════════
+function renderAll(areaId,items){
+  var area=g(areaId);area.innerHTML='';
+  if(!items.length){
+    var isHw=areaId==='hw-area';
+    area.innerHTML='<div class="empty"><div class="ei">'+(isHw?'📝':'💬')+'</div><p>'+(isHw?'ยังไม่มีการบ้าน<br>พิมได้เลย!':'ยังไม่มีข้อความ<br>เริ่มแชทได้เลย!')+'</p></div>';
     return;
   }
-  var lastDate = '';
-  var lastUser = '';
-  items.forEach(function(item, idx) {
-    if (item.date !== lastDate) {
-      var sep = document.createElement('div');
-      sep.className = 'date-sep';
-      sep.textContent = item.date;
-      area.appendChild(sep);
-      lastDate = item.date;
-      lastUser = '';
+  var lastDate='',lastUser='';
+  items.forEach(function(item){
+    if(item.date!==lastDate){
+      var sep=document.createElement('div');sep.className='dsep';sep.textContent=item.date;
+      area.appendChild(sep);lastDate=item.date;lastUser='';
     }
-    var isFirst = item.username !== lastUser;
-    area.appendChild(makeBubble(item, isFirst));
-    lastUser = item.username;
+    var isFirst=item.username!==lastUser;
+    area.appendChild(makeBubble(item,isFirst));
+    lastUser=item.username;
   });
-  scrollBottom(areaId);
+  scrollBot(areaId);
 }
 
-function appendBubble(areaId, item, isHw) {
-  var area = document.getElementById(areaId);
-  // clear empty state
-  var empty = area.querySelector('.empty-state');
-  if (empty) empty.remove();
-  // check date
-  var last = area.querySelector('.date-sep:last-of-type');
-  if (!last || last.textContent !== item.date) {
-    var sep = document.createElement('div');
-    sep.className = 'date-sep';
-    sep.textContent = item.date;
-    area.appendChild(sep);
+function appendBubble(areaId,item){
+  var area=g(areaId);
+  var empty=area.querySelector('.empty');if(empty)empty.remove();
+  var lastSep=area.querySelector('.dsep:last-of-type');
+  if(!lastSep||lastSep.textContent!==item.date){
+    var sep=document.createElement('div');sep.className='dsep';sep.textContent=item.date;area.appendChild(sep);
   }
-  // check group
-  var lastRow = area.querySelector('.bubble-row:last-child');
-  var lastUsername = lastRow ? lastRow.dataset.user : '';
-  var isFirst = item.username !== lastUsername;
-  area.appendChild(makeBubble(item, isFirst));
-  scrollBottom(areaId);
+  var lastRow=area.querySelector('.brow:last-child');
+  var lastUser=lastRow?lastRow.dataset.user:'';
+  area.appendChild(makeBubble(item,item.username!==lastUser));
+  scrollBot(areaId);
 }
 
-function makeBubble(item, isFirst) {
-  var isMe = item.username === ME.username;
-  var row = document.createElement('div');
-  row.className = 'bubble-row ' + (isMe?'me':'other') + (isFirst?' first':'');
-  row.id = 'bbl-' + item.id;
-  row.dataset.user = item.username;
+function makeBubble(item,isFirst){
+  var isMe=item.username===ME.username;
+  var row=document.createElement('div');
+  row.className='brow '+(isMe?'me':'ot')+(isFirst?' first':'');
+  row.id='bbl-'+item.id;row.dataset.user=item.username;
 
-  var av = document.createElement('div');
-  av.className = 'avatar-bubble';
-  av.textContent = item.displayName.charAt(0).toUpperCase();
-  if (isMe) av.style.background = getColor(item.username);
-  else av.style.background = 'linear-gradient(135deg, ' + getColor(item.username) + '55, ' + getColor(item.username) + '22)';
+  // avatar
+  var av=document.createElement('div');av.className='bav';
+  av.textContent=item.displayName.charAt(0).toUpperCase();
+  av.style.background=getColor(item.username)+'33';
+  av.style.color=getColor(item.username);
 
-  var wrap = document.createElement('div');
-  wrap.className = 'bubble-wrap';
+  var wrap=document.createElement('div');wrap.className='bwrap';
 
-  var nameEl = document.createElement('div');
-  nameEl.className = 'bubble-name';
-  nameEl.textContent = item.displayName;
+  // name
+  var nameEl=document.createElement('div');nameEl.className='bname';nameEl.textContent=item.displayName;
 
-  var bbl = document.createElement('div');
-  bbl.className = 'bubble';
-  bbl.textContent = item.text;
+  // bubble
+  var bbl=document.createElement('div');bbl.className='bubble';
 
-  // delete button (only own)
-  if (isMe) {
-    var del = document.createElement('button');
-    del.className = 'bubble-del';
-    del.textContent = 'ลบ';
-    del.onclick = function(e) {
-      e.stopPropagation();
-      var url = row.closest('#chat-area') || document.getElementById('chat-area').contains(row) ? '/api/chat/' : '/api/hw/';
-      // determine which api
-      var isChat = !!document.getElementById('chat-area').querySelector('#bbl-'+item.id);
-      deleteBubble(item.id, isChat ? '/api/chat/' : '/api/hw/');
-    };
-    bbl.appendChild(del);
+  // apply style
+  applyStyleToBubble(bbl, item.text, item.style, item);
+
+  // actions
+  var acts=document.createElement('div');acts.className='bactions';
+  if(isMe){
+    if(!item.dataUrl||(item.mimetype&&item.mimetype.startsWith('image/'))){
+      // can edit text
+    }
+    var editBtn=document.createElement('button');editBtn.className='bact';editBtn.textContent='✏️';
+    editBtn.onclick=function(){openEdit(item.id,item.text,isMe);};
+    var delBtn=document.createElement('button');delBtn.className='bact del';delBtn.textContent='🗑️';
+    delBtn.onclick=function(){deleteItem(item.id,areaIdFromRow(row));};
+    if(item.text)acts.appendChild(editBtn);
+    acts.appendChild(delBtn);
   }
+  bbl.appendChild(acts);
 
-  var timeEl = document.createElement('div');
-  timeEl.className = 'bubble-time';
-  timeEl.textContent = item.time;
+  // time + edited
+  var timeEl=document.createElement('div');timeEl.className='btime';
+  timeEl.innerHTML=item.time+(item.edited?' <span class="edited-tag">(แก้ไขแล้ว)</span>':'');
 
-  wrap.appendChild(nameEl);
-  wrap.appendChild(bbl);
-  wrap.appendChild(timeEl);
-
-  if (isMe) { row.appendChild(wrap); row.appendChild(av); }
-  else       { row.appendChild(av); row.appendChild(wrap); }
-
+  wrap.appendChild(nameEl);wrap.appendChild(bbl);wrap.appendChild(timeEl);
+  if(isMe){row.appendChild(wrap);row.appendChild(av);}
+  else{row.appendChild(av);row.appendChild(wrap);}
   return row;
 }
 
-async function deleteBubble(id, apiPrefix) {
-  var r = await fetch(apiPrefix + id, { method: 'DELETE' });
-  var d = await r.json();
-  if (!d.ok && d.msg) alert(d.msg);
+function applyStyleToBubble(bbl, text, style, item){
+  bbl.innerHTML='';
+  // media first
+  if(item&&item.dataUrl){
+    var mt=item.mimetype||'';
+    if(mt.startsWith('image/')){
+      var img=document.createElement('img');img.src=item.dataUrl;img.alt='รูปภาพ';
+      img.onclick=function(){openImgViewer(item.dataUrl);};
+      bbl.appendChild(img);
+    } else if(mt.startsWith('audio/')){
+      var aud=document.createElement('audio');aud.controls=true;aud.src=item.dataUrl;
+      bbl.appendChild(aud);
+    } else {
+      var a=document.createElement('a');a.className='file-chip';a.href=item.dataUrl;
+      a.download=item.filename||'file';a.target='_blank';
+      a.innerHTML='<span class="fi">📄</span><div><div class="fn">'+(item.filename||'ไฟล์')+'</div><div style="font-size:10px;color:var(--text3)">แตะเพื่อดาวน์โหลด</div></div>';
+      bbl.appendChild(a);
+    }
+  }
+  if(text){
+    var span=document.createElement('span');
+    span.textContent=text;
+    if(style){
+      if(style.bold)span.style.fontWeight='700';
+      if(style.italic)span.style.fontStyle='italic';
+      if(style.color&&style.color!=='#eae8f5')span.style.color=style.color;
+      if(style.size)span.style.fontSize=style.size+'px';
+    }
+    if(item&&item.dataUrl)span.style.marginTop='6px';
+    bbl.appendChild(span);
+  }
 }
 
-// ── SEND ─────────────────────────────────────────────
-async function sendChat() {
-  var inp = document.getElementById('chat-input');
-  var text = inp.value.trim();
-  if (!text) return;
-  inp.value = ''; autoResize(inp);
-  await post('/api/chat', { text });
+function updateBubble(id,text,style){
+  var row=document.getElementById('bbl-'+id);if(!row)return;
+  var bbl=row.querySelector('.bubble');if(!bbl)return;
+  // find item
+  var item=[...chatMsgs,...hwNotes].find(m=>m.id===id)||{};
+  item.text=text;item.style=style;item.edited=true;
+  applyStyleToBubble(bbl,text,style,item);
+  // re-add actions
+  var isMe=item.username===ME.username;
+  var acts=document.createElement('div');acts.className='bactions';
+  if(isMe){
+    var editBtn=document.createElement('button');editBtn.className='bact';editBtn.textContent='✏️';
+    editBtn.onclick=function(){openEdit(id,text,true);};
+    var delBtn=document.createElement('button');delBtn.className='bact del';delBtn.textContent='🗑️';
+    delBtn.onclick=function(){deleteItem(id,areaIdFromRow(row));};
+    if(text)acts.appendChild(editBtn);acts.appendChild(delBtn);
+  }
+  bbl.appendChild(acts);
+  // update time
+  var timeEl=row.querySelector('.btime');
+  if(timeEl)timeEl.innerHTML=timeEl.textContent.split('(')[0].trim()+' <span class="edited-tag">(แก้ไขแล้ว)</span>';
 }
 
-async function sendHW() {
-  var inp = document.getElementById('hw-input');
-  var text = inp.value.trim();
-  if (!text) return;
-  inp.value = ''; autoResize(inp);
-  await post('/api/hw', { text });
+function removeBubble(id){
+  var el=document.getElementById('bbl-'+id);
+  if(el){el.style.opacity='0';el.style.transform='scale(0.9)';el.style.transition='all .2s';setTimeout(()=>el.remove(),200);}
 }
 
-function setupInput(id, sendFn) {
-  var inp = document.getElementById(id);
-  inp.addEventListener('input', function(){ autoResize(this); });
-  inp.addEventListener('keydown', function(e){
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendFn(); }
-  });
+function areaIdFromRow(row){
+  return document.getElementById('chat-area').contains(row)?'chat-area':'hw-area';
 }
 
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+// ═══ SEND ════════════════════════════════════════════════
+function getStyle(tab){
+  var t=tab||'chat';
+  var bold=styleState[t].bold;
+  var italic=styleState[t].italic;
+  var color=g(t+'-color')?g(t+'-color').value:'#eae8f5';
+  var size=parseInt(g(t+'-size')?g(t+'-size').value:15);
+  if(!bold&&!italic&&color==='#eae8f5'&&size===15)return null;
+  return{bold,italic,color,size};
 }
 
-// ── UTILS ─────────────────────────────────────────────
-function v(id) { return document.getElementById(id).value.trim(); }
-
-async function post(url, body) {
-  var r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
-  return r.json();
+async function sendMsg(tab){
+  var inp=g(tab+'-inp');
+  var text=inp.value.trim();
+  if(!text)return;
+  inp.value='';autoResize(inp);
+  var style=getStyle(tab);
+  var api=tab==='chat'?'/api/chat':'/api/hw';
+  await post(api,{text,style});
 }
 
-function showErr(el, msg) { el.textContent = msg; el.style.display = 'block'; }
+// ═══ FILE UPLOAD ══════════════════════════════════════════
+function triggerFile(tab){g('file-'+tab).click();}
 
-function scrollBottom(id) {
-  var el = document.getElementById(id);
-  if (el) el.scrollTop = el.scrollHeight;
+async function onFileSelect(e,tab){
+  var file=e.target.files[0];if(!file)return;
+  e.target.value='';
+  if(file.size>10*1024*1024){toast('ไฟล์ใหญ่เกิน 10MB',false);return;}
+  var fd=new FormData();fd.append('file',file);
+  var r=await fetch('/api/upload',{method:'POST',body:fd});
+  var d=await r.json();
+  if(!d.ok){toast('อัพโหลดไม่ได้',false);return;}
+  var api=tab==='chat'?'/api/chat':'/api/hw';
+  var style=getStyle(tab);
+  await post(api,{dataUrl:d.dataUrl,mimetype:d.mimetype,filename:d.originalname,style});
 }
 
-var COLORS = ['#7c6ef5','#f5a623','#4caf91','#e05b7a','#5bc0eb','#c97cf5','#61c5a0','#f5d623'];
-function getColor(username) {
-  var hash = 0;
-  for (var i=0; i<username.length; i++) hash = username.charCodeAt(i) + ((hash<<5)-hash);
-  return COLORS[Math.abs(hash) % COLORS.length];
+// ═══ RECORD AUDIO ════════════════════════════════════════
+async function startRecord(tab){
+  if(mediaRecorder&&mediaRecorder.state==='recording'){toast('กำลังอัดอยู่แล้ว',false);return;}
+  try{
+    var stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    recChunks=[];recTarget=tab;recSecs=0;
+    mediaRecorder=new MediaRecorder(stream);
+    mediaRecorder.ondataavailable=function(e){if(e.data.size>0)recChunks.push(e.data);};
+    mediaRecorder.onstop=function(){
+      var blob=new Blob(recChunks,{type:'audio/webm'});
+      var reader=new FileReader();
+      reader.onload=async function(){
+        var api=recTarget==='chat'?'/api/chat':'/api/hw';
+        await post(api,{dataUrl:reader.result,mimetype:'audio/webm',filename:'voice.webm'});
+      };
+      reader.readAsDataURL(blob);
+      stream.getTracks().forEach(t=>t.stop());
+      clearInterval(recTimer);
+      g(tab+'-rec').classList.remove('on');
+    };
+    mediaRecorder.start();
+    g(tab+'-rec').classList.add('on');
+    recTimer=setInterval(function(){
+      recSecs++;
+      var m=Math.floor(recSecs/60),s=recSecs%60;
+      g(tab+'-rec-time').textContent=m+':'+(s<10?'0':'')+s;
+    },1000);
+  }catch(e){toast('ไม่สามารถเข้าถึงไมค์ได้',false);}
 }
 
-// enter on login/register
-document.addEventListener('keydown', function(e){
-  if (e.key !== 'Enter') return;
-  var ls = document.getElementById('auth-screen');
-  if (!ls || ls.style.display === 'none') return;
-  if (document.getElementById('pane-login').classList.contains('on')) doLogin();
-  else doRegister();
+function stopRecord(tab){
+  if(mediaRecorder&&mediaRecorder.state==='recording')mediaRecorder.stop();
+}
+
+// ═══ STYLE TOOLS ═════════════════════════════════════════
+function toggleStyle(type,tab){
+  var t=tab||'chat';
+  styleState[t][type]=!styleState[t][type];
+  var btnId=(t==='hw'?'hw-':'')+(type==='bold'?'bold':'italic')+'-btn';
+  g(btnId).classList.toggle('on',styleState[t][type]);
+}
+
+// ═══ DELETE ══════════════════════════════════════════════
+async function deleteItem(id,areaId){
+  if(!confirm('ลบข้อความนี้?'))return;
+  var api=areaId==='chat-area'?'/api/chat/':'/api/hw/';
+  var r=await fetch(api+id,{method:'DELETE'});
+  var d=await r.json();
+  if(!d.ok&&d.msg)toast(d.msg,false);
+}
+
+// ═══ EDIT ════════════════════════════════════════════════
+function openEdit(id,text,isMe){
+  if(!isMe){toast('แก้ไขได้แค่ของตัวเองนะ',false);return;}
+  editTarget={id,tab:activeTab};
+  g('edit-text').value=text;
+  g('edit-modal').classList.add('on');
+  setTimeout(()=>g('edit-text').focus(),100);
+}
+function closeEdit(){g('edit-modal').classList.remove('on');}
+async function submitEdit(){
+  var text=g('edit-text').value.trim();
+  if(!text){toast('ข้อความต้องไม่ว่าง',false);return;}
+  var api=editTarget.tab==='chat'?'/api/chat/':'/api/hw/';
+  var r=await fetch(api+editTarget.id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
+  var d=await r.json();
+  if(d.ok){closeEdit();toast('แก้ไขแล้ว ✓',true);}
+  else toast(d.msg||'ไม่สำเร็จ',false);
+}
+
+// ═══ IMAGE VIEWER ════════════════════════════════════════
+function openImgViewer(src){g('img-viewer-img').src=src;g('img-viewer').classList.add('on');}
+function closeImgViewer(){g('img-viewer').classList.remove('on');g('img-viewer-img').src='';}
+
+// ═══ UTILS ═══════════════════════════════════════════════
+function setupInp(id,fn){
+  var inp=g(id);
+  inp.addEventListener('input',function(){autoResize(this);});
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();fn();}});
+}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+function scrollBot(id){var el=g(id);if(el)el.scrollTop=el.scrollHeight;}
+function g(id){return document.getElementById(id);}
+function showEl(el,msg){el.textContent=msg;el.style.display='block';}
+async function post(url,body){var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return r.json();}
+function toast(msg,ok){
+  var el=g('toast');el.textContent=msg;el.className='toast '+(ok?'ok':'err');
+  el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),3000);
+}
+var COLORS=['#7c6ef5','#f0a500','#4caf91','#e05b7a','#5bc0eb','#c97cf5','#61c5a0','#f5d623'];
+function getColor(u){var h=0;for(var i=0;i<u.length;i++)h=u.charCodeAt(i)+((h<<5)-h);return COLORS[Math.abs(h)%COLORS.length];}
+
+// enter on auth
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter')return;
+  var a=g('auth');if(!a||a.style.display==='none')return;
+  if(g('pane-login').classList.contains('on'))doLogin();else doRegister();
 });
+document.getElementById('edit-modal').addEventListener('click',function(e){if(e.target===this)closeEdit();});
 </script>
 </body>
 </html>

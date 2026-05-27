@@ -1,11 +1,12 @@
 require('dotenv').config();
-const express = require('express');
-const session = require('express-session');
-const path    = require('path');
-const fs      = require('fs');
+const express  = require('express');
+const session  = require('express-session');
+const path     = require('path');
+const fs       = require('fs');
+const multer   = require('multer');
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('trust proxy', 1);
 app.use(session({
@@ -14,7 +15,7 @@ app.use(session({
   saveUninitialized: false,
   rolling: true,
   cookie: {
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 วัน — ไม่ต้อง login ใหม่
+    maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
@@ -22,7 +23,13 @@ app.use(session({
 }));
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
-// ─── FILES ───────────────────────────────────────────────
+// ─── UPLOAD (store as base64 in JSON, no disk needed) ────
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB
+});
+
+// ─── FILES ────────────────────────────────────────────────
 const USERS_FILE = './users.json';
 const CHAT_FILE  = './chat.json';
 const HW_FILE    = './homework.json';
@@ -40,16 +47,15 @@ function saveChat(c) { writeJson(CHAT_FILE, c); }
 function getHW()    { return readJson(HW_FILE, []); }
 function saveHW(h)  { writeJson(HW_FILE, h); }
 
-// ─── SSE broadcast ───────────────────────────────────────
+// ─── SSE ─────────────────────────────────────────────────
 const sseChat = new Set();
 const sseHW   = new Set();
-
 function broadcast(clients, data) {
   const msg = 'data: ' + JSON.stringify(data) + '\n\n';
   clients.forEach(res => { try { res.write(msg); } catch { clients.delete(res); } });
 }
 
-// ─── TIME ────────────────────────────────────────────────
+// ─── TIME ─────────────────────────────────────────────────
 function thaiNow() {
   const now = new Date();
   return {
@@ -59,26 +65,23 @@ function thaiNow() {
   };
 }
 
-// ─── MIDDLEWARE ──────────────────────────────────────────
+// ─── MIDDLEWARE ───────────────────────────────────────────
 const auth = (req, res, next) => {
   if (req.session && req.session.user) return next();
   res.status(401).json({ ok: false, msg: 'กรุณาเข้าสู่ระบบ' });
 };
 
-// ─── ROUTES ──────────────────────────────────────────────
+// ─── AUTH ROUTES ──────────────────────────────────────────
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
-// ME — เช็ก session ยังอยู่ไหม
 app.get('/api/me', (req, res) => {
   if (req.session && req.session.user) return res.json({ ok: true, user: req.session.user });
   res.json({ ok: false });
 });
 
-// REGISTER
 app.post('/api/register', (req, res) => {
   const { username, password, displayName } = req.body;
-  if (!username || !password || !displayName)
-    return res.json({ ok: false, msg: 'กรอกให้ครบนะ' });
+  if (!username || !password || !displayName) return res.json({ ok: false, msg: 'กรอกให้ครบนะ' });
   if (username.length < 2) return res.json({ ok: false, msg: 'username อย่างน้อย 2 ตัว' });
   if (password.length < 4) return res.json({ ok: false, msg: 'รหัสผ่านอย่างน้อย 4 ตัว' });
   const users = getUsers();
@@ -89,7 +92,6 @@ app.post('/api/register', (req, res) => {
   res.json({ ok: true });
 });
 
-// LOGIN
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   const users = getUsers();
@@ -99,29 +101,34 @@ app.post('/api/login', (req, res) => {
   res.json({ ok: true });
 });
 
-// LOGOUT
-app.post('/api/logout', (req, res) => {
-  req.session.destroy();
-  res.json({ ok: true });
+app.post('/api/logout', (req, res) => { req.session.destroy(); res.json({ ok: true }); });
+
+// ─── UPLOAD (image/audio/file) ────────────────────────────
+app.post('/api/upload', auth, upload.single('file'), (req, res) => {
+  if (!req.file) return res.json({ ok: false, msg: 'ไม่มีไฟล์' });
+  const b64 = req.file.buffer.toString('base64');
+  const dataUrl = `data:${req.file.mimetype};base64,${b64}`;
+  res.json({ ok: true, dataUrl, mimetype: req.file.mimetype, originalname: req.file.originalname, size: req.file.size });
 });
 
 // ─── CHAT ─────────────────────────────────────────────────
-app.get('/api/chat', auth, (req, res) => {
-  res.json(getChat().slice(-100)); // ล่าสุด 100 ข้อความ
-});
+app.get('/api/chat', auth, (req, res) => res.json(getChat().slice(-150)));
 
 app.post('/api/chat', auth, (req, res) => {
-  const { text } = req.body;
-  if (!text || !text.trim()) return res.json({ ok: false });
+  const { text, dataUrl, mimetype, filename, style } = req.body;
+  if (!text && !dataUrl) return res.json({ ok: false });
   const t = thaiNow();
   const msg = {
     id: Date.now(),
     username: req.session.user.username,
     displayName: req.session.user.displayName,
-    text: text.trim(),
-    time: t.time,
-    date: t.date,
-    iso: t.iso
+    text: text ? text.trim() : '',
+    dataUrl: dataUrl || null,
+    mimetype: mimetype || null,
+    filename: filename || null,
+    style: style || null, // { color, bold, italic, size }
+    time: t.time, date: t.date, iso: t.iso,
+    edited: false
   };
   const chat = getChat();
   chat.push(msg);
@@ -131,20 +138,35 @@ app.post('/api/chat', auth, (req, res) => {
   res.json({ ok: true, msg });
 });
 
+// EDIT chat message
+app.put('/api/chat/:id', auth, (req, res) => {
+  const id = parseInt(req.params.id);
+  const { text, style } = req.body;
+  const chat = getChat();
+  const idx = chat.findIndex(m => m.id === id);
+  if (idx === -1) return res.json({ ok: false, msg: 'ไม่พบข้อความ' });
+  if (chat[idx].username !== req.session.user.username) return res.json({ ok: false, msg: 'แก้ไขได้แค่ของตัวเองนะ' });
+  if (text !== undefined) chat[idx].text = text.trim();
+  if (style !== undefined) chat[idx].style = style;
+  chat[idx].edited = true;
+  chat[idx].editedAt = new Date().toISOString();
+  saveChat(chat);
+  broadcast(sseChat, { type: 'edit', id, text: chat[idx].text, style: chat[idx].style });
+  res.json({ ok: true });
+});
+
 app.delete('/api/chat/:id', auth, (req, res) => {
   const id = parseInt(req.params.id);
   let chat = getChat();
   const idx = chat.findIndex(m => m.id === id);
   if (idx === -1) return res.json({ ok: false });
-  if (chat[idx].username !== req.session.user.username)
-    return res.json({ ok: false, msg: 'ลบได้แค่ของตัวเองนะ' });
+  if (chat[idx].username !== req.session.user.username) return res.json({ ok: false, msg: 'ลบได้แค่ของตัวเองนะ' });
   chat.splice(idx, 1);
   saveChat(chat);
   broadcast(sseChat, { type: 'delete', id });
   res.json({ ok: true });
 });
 
-// SSE — chat
 app.get('/api/chat/stream', auth, (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
@@ -155,23 +177,24 @@ app.get('/api/chat/stream', auth, (req, res) => {
   req.on('close', () => sseChat.delete(res));
 });
 
-// ─── HOMEWORK NOTES ───────────────────────────────────────
-app.get('/api/hw', auth, (req, res) => {
-  res.json(getHW().slice(-200));
-});
+// ─── HOMEWORK ─────────────────────────────────────────────
+app.get('/api/hw', auth, (req, res) => res.json(getHW().slice(-200)));
 
 app.post('/api/hw', auth, (req, res) => {
-  const { text } = req.body;
-  if (!text || !text.trim()) return res.json({ ok: false });
+  const { text, dataUrl, mimetype, filename, style } = req.body;
+  if (!text && !dataUrl) return res.json({ ok: false });
   const t = thaiNow();
   const note = {
     id: Date.now(),
     username: req.session.user.username,
     displayName: req.session.user.displayName,
-    text: text.trim(),
-    time: t.time,
-    date: t.date,
-    iso: t.iso
+    text: text ? text.trim() : '',
+    dataUrl: dataUrl || null,
+    mimetype: mimetype || null,
+    filename: filename || null,
+    style: style || null,
+    time: t.time, date: t.date, iso: t.iso,
+    edited: false
   };
   const hw = getHW();
   hw.push(note);
@@ -181,20 +204,34 @@ app.post('/api/hw', auth, (req, res) => {
   res.json({ ok: true, note });
 });
 
+app.put('/api/hw/:id', auth, (req, res) => {
+  const id = parseInt(req.params.id);
+  const { text, style } = req.body;
+  const hw = getHW();
+  const idx = hw.findIndex(n => n.id === id);
+  if (idx === -1) return res.json({ ok: false, msg: 'ไม่พบโน้ต' });
+  if (hw[idx].username !== req.session.user.username) return res.json({ ok: false, msg: 'แก้ไขได้แค่ของตัวเองนะ' });
+  if (text !== undefined) hw[idx].text = text.trim();
+  if (style !== undefined) hw[idx].style = style;
+  hw[idx].edited = true;
+  hw[idx].editedAt = new Date().toISOString();
+  saveHW(hw);
+  broadcast(sseHW, { type: 'edit', id, text: hw[idx].text, style: hw[idx].style });
+  res.json({ ok: true });
+});
+
 app.delete('/api/hw/:id', auth, (req, res) => {
   const id = parseInt(req.params.id);
   let hw = getHW();
   const idx = hw.findIndex(n => n.id === id);
   if (idx === -1) return res.json({ ok: false });
-  if (hw[idx].username !== req.session.user.username)
-    return res.json({ ok: false, msg: 'ลบได้แค่ของตัวเองนะ' });
+  if (hw[idx].username !== req.session.user.username) return res.json({ ok: false, msg: 'ลบได้แค่ของตัวเองนะ' });
   hw.splice(idx, 1);
   saveHW(hw);
   broadcast(sseHW, { type: 'delete', id });
   res.json({ ok: true });
 });
 
-// SSE — homework
 app.get('/api/hw/stream', auth, (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
@@ -206,4 +243,4 @@ app.get('/api/hw/stream', auth, (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('✅ ห้อง 4/2 running on port ' + PORT));
+app.listen(PORT, () => console.log('✅ ห้อง 4/2 v2 running on port ' + PORT));
