@@ -279,7 +279,7 @@ audio{accent-color:var(--ac)}
   </div>
   <div class="tabbar">
     <button class="tabbtn on" id="tab-chat" onclick="switchTab('chat')">💬 แชท<span class="udot" id="dot-chat"></span></button>
-    <button class="tabbtn hw" id="tab-hw" onclick="switchTab('hw')">📝 การบ้าน<span class="udot" id="dot-hw" style="background:var(--hw)"></span></button>
+    <button class="tabbtn hw" id="tab-hw" onclick="openNotion()">📝 การบ้าน</button>
   </div>
 
   <!-- CHAT -->
@@ -703,6 +703,10 @@ async function submitEdit(){
 // ═══ IMAGE VIEWER ════════════════════════════════════════
 function openImgViewer(src){g('img-viewer-img').src=src;g('img-viewer').classList.add('on');}
 function closeImgViewer(){g('img-viewer').classList.remove('on');g('img-viewer-img').src='';}
+
+function openNotion(){
+  window.open('https://www.notion.so/4-2-364a097395168029bb93f28938578c19?source=copy_link','_blank');
+}
 
 // ═══ UTILS ═══════════════════════════════════════════════
 function setupInp(id,fn){
